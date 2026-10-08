@@ -77,6 +77,7 @@ export const App: React.FC = () => {
     isPushToTalkActive,
     interimTranscript,
     isVoiceSynthesisEnabled,
+    isStreamingLive,
     setIsVoiceSynthesisEnabled,
     startPushToTalk,
     stopPushToTalk,
@@ -235,6 +236,7 @@ export const App: React.FC = () => {
                 isPushToTalkActive={isPushToTalkActive}
                 interimTranscript={interimTranscript}
                 isVoiceSynthesisEnabled={isVoiceSynthesisEnabled}
+                isStreamingLive={isStreamingLive}
                 onToggleVoiceSynthesis={() => setIsVoiceSynthesisEnabled((prev) => !prev)}
                 onStartPushToTalk={startPushToTalk}
                 onStopPushToTalk={stopPushToTalk}

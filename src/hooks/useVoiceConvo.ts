@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { OSCECase, ChatMessage, AvatarGesture, SpeechState, Language } from '../types';
 import { medicalAudio } from '../utils/audioSimulator';
+import { StreamingVoiceClient } from '../lib/streamingVoiceClient';
+import { supabaseService } from '../lib/supabase';
 
 interface UseVoiceConvoProps {
   currentCase: OSCECase;
@@ -20,13 +22,106 @@ export const useVoiceConvo = ({
   const [isPushToTalkActive, setIsPushToTalkActive] = useState(false);
   const [isVoiceSynthesisEnabled, setIsVoiceSynthesisEnabled] = useState(true);
   const [interimTranscript, setInterimTranscript] = useState('');
-  const [audioStreamUri, setAudioStreamUri] = useState<string | null>(null);
+  const [isStreamingLive, setIsStreamingLive] = useState(false);
+  const [streamingStatus, setStreamingStatus] = useState<'disconnected' | 'connecting' | 'connected' | 'error'>('disconnected');
 
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const streamingClientRef = useRef<StreamingVoiceClient | null>(null);
+  const activeStreamingMsgIdRef = useRef<string | null>(null);
 
-  // Initialize SpeechSynthesis and SpeechRecognition
+  // Setup streaming client for Google Cloud Run
+  useEffect(() => {
+    const streamingUrl =
+      (import.meta as any).env?.VITE_VOICE_STREAMING_URL ||
+      (typeof window !== 'undefined' && window.location.hostname === 'localhost'
+        ? 'ws://localhost:8080/live-osce'
+        : '');
+
+    if (streamingUrl) {
+      supabaseService.getSessionToken().then((token) => {
+        const client = new StreamingVoiceClient(
+          streamingUrl,
+          token,
+          currentCase,
+          language,
+          {
+            onStatusChange: (status) => {
+              setStreamingStatus(status);
+              setIsStreamingLive(status === 'connected');
+            },
+            onCandidateTranscript: (text) => {
+              setInterimTranscript(text);
+            },
+            onPatientToken: (token) => {
+              setMessages((prev) => {
+                const targetId = activeStreamingMsgIdRef.current;
+                if (!targetId) return prev;
+
+                return prev.map((m) =>
+                  m.id === targetId ? { ...m, text: m.text + token } : m
+                );
+              });
+            },
+            onPatientSpeakingStart: () => {
+              setSpeechState('speaking');
+            },
+            onPatientSpeakingEnd: () => {
+              setSpeechState('idle');
+              onGestureChange(currentCase.patient.defaultGesture);
+            },
+            onGesture: (gesture) => {
+              onGestureChange(gesture);
+            },
+            onRubricScored: (rubricId) => {
+              onRubricItemScored(rubricId);
+            },
+            onTurnComplete: (fullText, fullTextBurmese, gesture) => {
+              const targetId = activeStreamingMsgIdRef.current;
+              if (targetId) {
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === targetId
+                      ? {
+                          ...m,
+                          text: fullText,
+                          textBurmese: fullTextBurmese || fullText,
+                          gesture: gesture || currentCase.patient.defaultGesture,
+                        }
+                      : m
+                  )
+                );
+              }
+              if (gesture) onGestureChange(gesture);
+            },
+            onError: (err) => {
+              console.warn('[useVoiceConvo] Streaming client error:', err);
+            },
+          }
+        );
+
+        streamingClientRef.current = client;
+        client.connect();
+      });
+    }
+
+    return () => {
+      if (streamingClientRef.current) {
+        streamingClientRef.current.disconnect();
+        streamingClientRef.current = null;
+      }
+    };
+  }, [currentCase.id, language, onGestureChange, onRubricItemScored]);
+
+  // Update streaming client when case or language changes
+  useEffect(() => {
+    if (streamingClientRef.current) {
+      streamingClientRef.current.updateCaseAndLanguage(currentCase, language);
+    }
+  }, [currentCase, language]);
+
+  // Initialize browser speech recognition as client-side speech input
   useEffect(() => {
     if (typeof window !== 'undefined') {
       synthRef.current = window.speechSynthesis || null;
@@ -38,7 +133,6 @@ export const useVoiceConvo = ({
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = true;
-        // Support Burmese and English input
         recognition.lang = language === 'my' ? 'my-MM' : 'en-US';
 
         recognition.onstart = () => {
@@ -171,7 +265,7 @@ export const useVoiceConvo = ({
     synthRef.current.speak(utterance);
   };
 
-  // Process candidate utterance through Google Cloud Gemini Flash Brain
+  // Process candidate utterance through Google Cloud Streaming or Edge Brain
   const handleCandidateUtterance = useCallback(
     async (candidateText: string) => {
       const clean = candidateText.trim();
@@ -191,7 +285,25 @@ export const useVoiceConvo = ({
       setMessages((prev) => [...prev, userMsg]);
       setSpeechState('processing');
 
-      // Prepare strict case template for zero-hallucination ground truth
+      // 2. Check if Ultra-Low Latency Streaming WebSocket is connected
+      if (streamingClientRef.current && streamingClientRef.current.isConnected()) {
+        const streamPatientMsgId = `msg-${Date.now()}-patient-stream`;
+        activeStreamingMsgIdRef.current = streamPatientMsgId;
+
+        const placeholderMsg: ChatMessage = {
+          id: streamPatientMsgId,
+          sender: 'patient',
+          text: '',
+          timestamp: timeStr,
+          gesture: currentCase.patient.defaultGesture,
+        };
+
+        setMessages((prev) => [...prev, placeholderMsg]);
+        streamingClientRef.current.sendCandidateText(clean);
+        return;
+      }
+
+      // 3. Fallback: Edge Serverless Function
       const stationTemplate = {
         stationId: currentCase.id,
         mainCategory: currentCase.mainCategory,
@@ -216,7 +328,6 @@ export const useVoiceConvo = ({
       };
 
       try {
-        // Call Google Cloud Gemini Flash Edge Serverless Function
         const response = await fetch('/api/ai-chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -255,7 +366,7 @@ export const useVoiceConvo = ({
         console.warn('API chat fallback:', err);
       }
 
-      // Dynamic Local Deterministic Fallback if serverless API is offline
+      // 4. Fallback: Dynamic Local Deterministic matching
       const matchedTrigger = currentCase.scriptTriggers?.find((t) =>
         t.triggers?.some((k) => clean.toLowerCase().includes(k.toLowerCase()))
       );
@@ -345,6 +456,7 @@ export const useVoiceConvo = ({
     ]);
     setSpeechState('idle');
     setInterimTranscript('');
+    activeStreamingMsgIdRef.current = null;
     if (synthRef.current) synthRef.current.cancel();
     if (audioPlayerRef.current) audioPlayerRef.current.pause();
   }, [currentCase, language]);
@@ -359,6 +471,8 @@ export const useVoiceConvo = ({
     isPushToTalkActive,
     interimTranscript,
     isVoiceSynthesisEnabled,
+    isStreamingLive,
+    streamingStatus,
     setIsVoiceSynthesisEnabled,
     startPushToTalk,
     stopPushToTalk,

@@ -1,0 +1,26 @@
+{
+  "name": "brightmed-cloud-run-voice-service",
+  "version": "1.0.0",
+  "description": "Google Cloud Run on-demand streaming WebSocket service for ultra-low latency OSCE voice AI (STT, Gemini Flash 3.*, and TTS with Supabase auth & credits)",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.28.0",
+    "@google-cloud/speech": "^6.7.0",
+    "@google-cloud/text-to-speech": "^5.8.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^16.4.7",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.14",
+    "@types/ws": "^8.5.14",
+    "tsx": "^4.19.2",
+    "typescript": "~5.7.3"
+  }
+}

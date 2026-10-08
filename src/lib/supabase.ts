@@ -252,6 +252,19 @@ class ProductionSupabaseService {
     return { success: true, credits: this.currentProfile.credits };
   }
 
+  // Get active session token for WebSocket authentication
+  public async getSessionToken(): Promise<string> {
+    if (this.client) {
+      try {
+        const { data: { session } } = await this.client.auth.getSession();
+        if (session?.access_token) {
+          return session.access_token;
+        }
+      } catch {}
+    }
+    return this.currentProfile.id || 'guest';
+  }
+
   private async syncProfileFromSupabase(user: User) {
     if (!this.client) return;
 

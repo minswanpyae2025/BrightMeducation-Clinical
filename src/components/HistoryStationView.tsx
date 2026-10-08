@@ -21,6 +21,7 @@ interface HistoryStationViewProps {
   isPushToTalkActive: boolean;
   interimTranscript: string;
   isVoiceSynthesisEnabled: boolean;
+  isStreamingLive?: boolean;
   onToggleVoiceSynthesis: () => void;
   onStartPushToTalk: () => void;
   onStopPushToTalk: () => void;
@@ -37,6 +38,7 @@ export const HistoryStationView: React.FC<HistoryStationViewProps> = ({
   isPushToTalkActive,
   interimTranscript,
   isVoiceSynthesisEnabled,
+  isStreamingLive = false,
   onToggleVoiceSynthesis,
   onStartPushToTalk,
   onStopPushToTalk,
@@ -145,9 +147,21 @@ export const HistoryStationView: React.FC<HistoryStationViewProps> = ({
         {/* Top Chat Bar */}
         <div className="px-5 sm:px-6 py-4 bg-gradient-to-r from-slate-50 to-blue-50/30 border-b border-slate-100 flex items-center justify-between">
           <div>
-            <h3 className="text-base font-extrabold text-slate-900">
-              {t.liveDialogue}
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-base font-extrabold text-slate-900">
+                {t.liveDialogue}
+              </h3>
+              {isStreamingLive ? (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-black border border-emerald-200 animate-pulse">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  ⚡ Live Stream
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-ios-blue text-[10px] font-bold border border-blue-100">
+                  ⚡ Cloud Voice
+                </span>
+              )}
+            </div>
             <p className="text-xs text-slate-500">
               {t.listeningYou}
             </p>
