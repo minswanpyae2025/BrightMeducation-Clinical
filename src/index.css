@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 20px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    min-height: 100dvh;
+    background-color: #F8FAFC;
+    color: #0F172A;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Pyidaungsu", "Noto Sans Myanmar", "Padauk", "Helvetica Neue", sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Android & Mobile Safe Viewport Handling */
+.min-h-dvh {
+  min-height: 100dvh;
+}
+
+.pb-safe-bottom {
+  padding-bottom: max(2rem, env(safe-area-inset-bottom, 24px));
+}
+
+.ios-glass {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* Hide scrollbar while preserving smooth touch scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Avatar chest breathing animation */
+@keyframes breathe {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-3px) scale(1.01); }
+}
+
+.animate-breathe {
+  animation: breathe 3.4s ease-in-out infinite;
+}
+
+/* Heartbeat pulse */
+@keyframes heart-pulse {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.2); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+  70% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+.animate-heart-pulse {
+  animation: heart-pulse 1.1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* Pain wince shudder */
+@keyframes wince-shudder {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px) rotate(-1deg); }
+  40% { transform: translateX(3px) rotate(1deg); }
+  60% { transform: translateX(-1px); }
+  80% { transform: translateX(1px); }
+}
+
+.animate-wince {
+  animation: wince-shudder 0.5s ease-in-out;
+}
