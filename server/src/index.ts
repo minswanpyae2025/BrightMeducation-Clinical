@@ -61,6 +61,22 @@ const server = http.createServer((req, res) => {
   res.end('Not Found');
 });
 
+// Security: IP Rate Limiting Map (Max 12 connection attempts per minute per IP)
+const ipConnectionMap = new Map<string, number[]>();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_CONNS_PER_WINDOW = 12;
+
+function checkIpRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const history = (ipConnectionMap.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  if (history.length >= MAX_CONNS_PER_WINDOW) {
+    return false;
+  }
+  history.push(now);
+  ipConnectionMap.set(ip, history);
+  return true;
+}
+
 // 2. WebSocket Server
 const wss = new WebSocketServer({ noServer: true });
 
@@ -68,6 +84,41 @@ server.on('upgrade', (request, socket, head) => {
   const { pathname } = parseUrl(request.url || '', true);
 
   if (pathname === '/live-osce' || pathname === '/ws') {
+    // 1. IP Rate Limiting Guard
+    const clientIp =
+      (request.headers['x-forwarded-for'] as string) ||
+      request.socket.remoteAddress ||
+      'unknown-ip';
+
+    if (!checkIpRateLimit(clientIp)) {
+      console.warn(`[Security] Rate limit exceeded for IP: ${clientIp}`);
+      socket.write('HTTP/1.1 429 Too Many Requests\r\n\r\n');
+      socket.destroy();
+      return;
+    }
+
+    // 2. Origin Security Guard
+    const origin = request.headers.origin;
+    const allowedOriginsEnv = process.env.ALLOWED_ORIGINS;
+
+    if (allowedOriginsEnv && origin) {
+      const allowedList = allowedOriginsEnv
+        .split(',')
+        .map((s) => s.trim().toLowerCase());
+      const originLower = origin.toLowerCase();
+      const isAllowed =
+        allowedList.includes(originLower) ||
+        originLower.includes('localhost') ||
+        originLower.includes('127.0.0.1');
+
+      if (!isAllowed) {
+        console.warn(`[Security] Rejected unauthorized origin: ${origin}`);
+        socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
+        socket.destroy();
+        return;
+      }
+    }
+
     wss.handleUpgrade(request, socket, head, (ws) => {
       wss.emit('connection', ws, request);
     });
@@ -220,20 +271,20 @@ wss.on('connection', async (ws: WebSocket, request: http.IncomingMessage) => {
       }
 
       if (msg.type === 'candidate_text') {
-        sessionManager?.markAlive();
+        sessionManager?.markActive();
         await pipeline.processCandidateText(msg.text);
         return;
       }
 
       if (msg.type === 'audio_chunk') {
-        sessionManager?.markAlive();
+        sessionManager?.markActive();
         // In streaming audio mode, candidate audio buffer chunk arrives
         // Can be routed to Google Cloud Speech-to-Text streaming recognizer
         return;
       }
 
       if (msg.type === 'audio_end') {
-        sessionManager?.markAlive();
+        sessionManager?.markActive();
         return;
       }
     } catch (err: any) {

@@ -22,6 +22,8 @@ export class SessionManager {
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private warningTimeout: NodeJS.Timeout | null = null;
   private expirationTimeout: NodeJS.Timeout | null = null;
+  private inactivityTimeout: NodeJS.Timeout | null = null;
+  private readonly INACTIVITY_LIMIT_MS = 120 * 1000; // 120 seconds of silence auto-disconnect
   private isAlive = true;
 
   constructor(config: SessionConfig) {
@@ -35,6 +37,7 @@ export class SessionManager {
 
     this.startHeartbeat();
     this.scheduleTimers();
+    this.resetInactivityTimer();
   }
 
   public getSessionId(): string {
@@ -55,6 +58,29 @@ export class SessionManager {
 
   public markAlive(): void {
     this.isAlive = true;
+    this.resetInactivityTimer();
+  }
+
+  public markActive(): void {
+    this.isAlive = true;
+    this.resetInactivityTimer();
+  }
+
+  private resetInactivityTimer(): void {
+    if (this.inactivityTimeout) {
+      clearTimeout(this.inactivityTimeout);
+    }
+    this.inactivityTimeout = setTimeout(() => {
+      console.log(`[SessionManager ${this.sessionId}] Inactive for 120s, scaling down to 0`);
+      this.send({
+        type: 'session_expired',
+        reason: 'Session paused due to 2 minutes of inactivity. Reconnect anytime to resume.',
+      });
+      this.cleanup();
+      try {
+        this.ws.close(1000, 'Inactive');
+      } catch {}
+    }, this.INACTIVITY_LIMIT_MS);
   }
 
   public send(msg: ServerMessage): void {
@@ -118,6 +144,10 @@ export class SessionManager {
     if (this.expirationTimeout) {
       clearTimeout(this.expirationTimeout);
       this.expirationTimeout = null;
+    }
+    if (this.inactivityTimeout) {
+      clearTimeout(this.inactivityTimeout);
+      this.inactivityTimeout = null;
     }
   }
 }

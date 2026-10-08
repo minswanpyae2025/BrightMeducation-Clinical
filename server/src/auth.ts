@@ -42,7 +42,7 @@ export class AuthService {
 
     // 1. Verify user JWT token with Supabase Auth
     let userId: string | null = null;
-    if (token && token.trim().length > 10) {
+    if (token && token.trim().length > 15) {
       try {
         const {
           data: { user },
@@ -57,19 +57,22 @@ export class AuthService {
       }
     }
 
-    // Fallback: If no token provided or guest session, look up or assign a guest id
+    // Strict Security Guard: Reject unauthorized or guest connections in production
+    const enforceAuth =
+      process.env.NODE_ENV === 'production' || process.env.ENFORCE_AUTH === 'true';
+
     if (!userId) {
-      if (token === 'guest' || !token) {
+      if (!enforceAuth && (token === 'guest' || !token)) {
         return {
           success: true,
-          userId: 'guest-session',
+          userId: 'dev-preview-user',
           credits: 80,
         };
       }
       return {
         success: false,
-        errorCode: 'INVALID_TOKEN',
-        error: 'Authentication failed. Please sign in with Google or your account.',
+        errorCode: 'UNAUTHORIZED',
+        error: 'Authentication required. Please sign in with Google or your account to access live OSCE streaming.',
       };
     }
 

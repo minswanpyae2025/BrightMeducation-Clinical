@@ -33,13 +33,15 @@ gcloud run deploy "$SERVICE_NAME" \
   --project "$PROJECT_ID" \
   --allow-unauthenticated \
   --min-instances 0 \
-  --max-instances 10 \
+  --max-instances 5 \
   --concurrency 80 \
   --timeout 3600 \
   --session-affinity \
   --port 8080 \
   --cpu 1 \
-  --memory 512Mi
+  --memory 512Mi \
+  --cpu-throttling \
+  --set-env-vars ENFORCE_AUTH=true
 
 # Print assigned HTTPS / WSS endpoint URL
 SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" --region "$REGION" --project "$PROJECT_ID" --format 'value(status.url)')

@@ -19,6 +19,9 @@ export interface PipelineCallbacks {
 }
 
 export class StreamingVoicePipeline {
+  // In-Memory Global Audio Cache: eliminates redundant TTS calls for standard questions
+  private static audioCache = new Map<string, string>();
+
   private genAI: GoogleGenAI | null = null;
   private ttsClient: textToSpeech.TextToSpeechClient | null = null;
   private template: StationTemplate;
@@ -94,7 +97,7 @@ export class StreamingVoicePipeline {
       config: {
         systemInstruction,
         temperature: 0.15,
-        maxOutputTokens: 300,
+        maxOutputTokens: 160,
       },
     });
 
@@ -213,6 +216,20 @@ export class StreamingVoicePipeline {
         ? 'en-US-Journey-F'
         : 'en-US-Journey-D';
 
+    const cacheKey = `${languageCode}:${voiceName}:${text.trim().toLowerCase()}`;
+    if (StreamingVoicePipeline.audioCache.has(cacheKey)) {
+      return StreamingVoicePipeline.audioCache.get(cacheKey)!;
+    }
+
+    const saveAndReturn = (base64Audio: string) => {
+      if (StreamingVoicePipeline.audioCache.size > 500) {
+        const firstKey = StreamingVoicePipeline.audioCache.keys().next().value;
+        if (firstKey) StreamingVoicePipeline.audioCache.delete(firstKey);
+      }
+      StreamingVoicePipeline.audioCache.set(cacheKey, base64Audio);
+      return base64Audio;
+    };
+
     // 1. Try official client library if credentials configured
     if (this.ttsClient) {
       try {
@@ -231,7 +248,8 @@ export class StreamingVoicePipeline {
         });
 
         if (response.audioContent) {
-          return Buffer.from(response.audioContent).toString('base64');
+          const base64 = Buffer.from(response.audioContent).toString('base64');
+          return saveAndReturn(base64);
         }
       } catch {}
     }
@@ -258,7 +276,7 @@ export class StreamingVoicePipeline {
         if (res.ok) {
           const json = (await res.json()) as any;
           if (json.audioContent) {
-            return json.audioContent;
+            return saveAndReturn(json.audioContent);
           }
         }
       } catch {}
