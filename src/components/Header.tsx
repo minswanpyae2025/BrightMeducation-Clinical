@@ -51,36 +51,36 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/90 select-none shadow-sm">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/90 select-none shadow-sm w-full overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 h-14 sm:h-20 flex items-center justify-between gap-1.5 sm:gap-3 w-full">
         {/* Left: Brand or Back to Hub */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
           {stationPhase !== 'hub' ? (
             <button
               onClick={() => {
                 medicalAudio.playHapticTap();
                 onGoToHub();
               }}
-              className="px-3 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs sm:text-sm flex items-center gap-1 transition-all shrink-0 active:scale-95"
+              className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs sm:text-sm flex items-center gap-1 transition-all shrink-0 active:scale-95"
             >
-              <ChevronLeft className="w-4 h-4 text-ios-blue" />
+              <ChevronLeft className="w-4 h-4 text-ios-blue shrink-0" />
               <span>{t.stationsHub}</span>
             </button>
           ) : (
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-ios-blue text-white flex items-center justify-center shadow-md shrink-0">
-                <Stethoscope className="w-5 h-5" />
+            <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-ios-blue text-white flex items-center justify-center shadow-md shrink-0">
+                <Stethoscope className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-sm sm:text-lg font-black text-slate-900 tracking-tight truncate">
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <span className="text-xs sm:text-lg font-black text-slate-900 tracking-tight truncate">
                     Bright Meducation
                   </span>
-                  <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-blue-50 text-ios-blue text-[10px] font-black uppercase tracking-wider border border-blue-100">
+                  <span className="hidden md:inline-block px-1.5 py-0.5 rounded-full bg-blue-50 text-ios-blue text-[9px] font-black uppercase tracking-wider border border-blue-100">
                     Clinical
                   </span>
                 </div>
-                <span className="text-[10px] sm:text-[11px] text-slate-500 font-medium block truncate">
+                <span className="text-[9px] sm:text-[11px] text-slate-500 font-medium block truncate">
                   OSCE Simulation
                 </span>
               </div>
@@ -102,19 +102,19 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         {/* Right: Language, Credits, User */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
           {/* Dual Language Switcher */}
           <button
             onClick={() => {
               medicalAudio.playHapticTap();
               onToggleLanguage();
             }}
-            className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-xs transition-all border border-slate-200/80 active:scale-95"
+            className="flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-xs transition-all border border-slate-200/80 active:scale-95 shrink-0"
             title="Switch Language / ဘာသာစကား ပြောင်းလဲမည်"
           >
-            <Globe className="w-3.5 h-3.5 text-ios-blue" />
-            <span className="hidden xs:inline">{language === 'my' ? '🇲🇲 မြန်မာ' : '🇬🇧 EN'}</span>
-            <span className="xs:hidden">{language === 'my' ? 'မြန်မာ' : 'EN'}</span>
+            <Globe className="w-3.5 h-3.5 text-ios-blue shrink-0" />
+            <span>{language === 'my' ? '🇲🇲' : '🇬🇧 EN'}</span>
+            <span className="hidden sm:inline">{language === 'my' ? ' မြန်မာ' : ''}</span>
           </button>
 
           {/* Real Credits Pill (Verified in Supabase) */}
@@ -123,10 +123,10 @@ export const Header: React.FC<HeaderProps> = ({
               medicalAudio.playHapticTap();
               onOpenAuthModal();
             }}
-            className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-50 to-sky-50 text-ios-blue font-black text-xs sm:text-sm border border-blue-200 shadow-sm active:scale-95 transition-all"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-50 to-sky-50 text-ios-blue font-black text-xs sm:text-sm border border-blue-200 shadow-sm active:scale-95 transition-all shrink-0"
             title={t.creditsExplanation}
           >
-            <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" />
+            <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 shrink-0" />
             <span>{userProfile.credits}</span>
             <span className="hidden sm:inline">{t.credits}</span>
           </button>
@@ -137,10 +137,10 @@ export const Header: React.FC<HeaderProps> = ({
               medicalAudio.playHapticTap();
               toggleSound();
             }}
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all active:scale-95"
+            className="w-7 h-7 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all active:scale-95 shrink-0"
             title={isMuted ? 'Unmute Sound' : 'Mute Sound'}
           >
-            {isMuted ? <VolumeX className="w-4 h-4 text-slate-400" /> : <Volume2 className="w-4 h-4 text-ios-blue" />}
+            {isMuted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-ios-blue" />}
           </button>
 
           {/* User Profile */}
@@ -149,10 +149,10 @@ export const Header: React.FC<HeaderProps> = ({
               medicalAudio.playHapticTap();
               onOpenAuthModal();
             }}
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-900 text-white font-black text-xs flex items-center justify-center shadow-sm active:scale-95 transition-all"
+            className="w-7 h-7 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-900 text-white font-black text-xs flex items-center justify-center shadow-sm active:scale-95 transition-all shrink-0"
             title="Account Profile"
           >
-            {userProfile.full_name?.charAt(0) || <User className="w-4 h-4" />}
+            {userProfile.full_name?.charAt(0) || <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
           </button>
         </div>
       </div>

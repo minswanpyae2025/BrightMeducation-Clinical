@@ -30,18 +30,34 @@ CREATE POLICY "Users can update their own profile"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id);
 
--- 3. Stations Table
+-- 3. Stations Table (Supports dynamic JSONB templates)
 CREATE TABLE IF NOT EXISTS public.stations (
   id TEXT PRIMARY KEY,
   category TEXT NOT NULL CHECK (category IN ('history_taking', 'physical_examination')),
   subcategory TEXT NOT NULL CHECK (subcategory IN ('cvs', 'respi', 'abdomen', 'cns')),
   title TEXT NOT NULL,
+  title_my TEXT,
+  subtitle TEXT,
+  subtitle_my TEXT,
   patient_name TEXT NOT NULL,
+  patient_name_my TEXT,
   patient_age INTEGER,
   patient_gender TEXT,
+  patient_occupation TEXT,
+  patient_occupation_my TEXT,
+  patient_appearance TEXT,
+  patient_appearance_my TEXT,
   chief_complaint TEXT NOT NULL,
+  chief_complaint_my TEXT,
+  default_gesture TEXT,
   credits_cost INTEGER NOT NULL DEFAULT 20, -- 20 credits per station attempt
   duration_minutes INTEGER NOT NULL DEFAULT 8,
+  candidate_brief JSONB,
+  vitals JSONB,
+  script_triggers JSONB,
+  physical_exam_systems JSONB,
+  rubric JSONB,
+  model_summary JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -193,6 +209,6 @@ VALUES
   ('hist-cns-headache', 'history_taking', 'cns', 'Thunderclap Headache - Red Flags', 'Michael Ross', 42, 'male', 'Sudden catastrophic headache like a baseball bat', 20, 8),
   ('exam-cvs-murmur', 'physical_examination', 'cvs', 'Focused Cardiovascular Examination', 'Robert Evans', 63, 'male', 'Heart auscultation, murmurs, carotid pulse & JVP', 20, 8),
   ('exam-respi-chest', 'physical_examination', 'respi', 'Focused Respiratory Examination', 'Sarah Jenkins', 52, 'female', 'Chest expansion, percussion, crackles & wheezes', 20, 8),
-  ('exam-abdo-quadrants', 'physical_examination', 'abdomen', 'Focused Abdominal Examination', 'James Taylor', 45, 'male', 'Palpation, guarding, peritonitis signs & bowel sounds', 20, 8),
+  ('exam-abdo-quadrants', 'physical_examination', 'abdomen', 'Focused Abdominal Examination', 'James Taylor', 52, 'male', 'Palpation, guarding, peritonitis signs & bowel sounds', 20, 8),
   ('exam-cns-neuro', 'physical_examination', 'cns', 'Focused Neurological Examination', 'Elena Rostova', 38, 'female', 'Cranial nerves, motor tone, power & reflexes', 20, 8)
 ON CONFLICT (id) DO NOTHING;

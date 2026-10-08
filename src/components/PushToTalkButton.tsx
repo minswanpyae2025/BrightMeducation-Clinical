@@ -42,7 +42,7 @@ export const PushToTalkButton: React.FC<PushToTalkButtonProps> = ({
           medicalAudio.playHapticTap();
           onStop();
         }}
-        className={`relative z-10 w-full sm:w-auto min-w-[240px] sm:min-w-[280px] h-16 sm:h-18 px-8 rounded-full font-black text-sm sm:text-base flex items-center justify-center gap-3 transition-all duration-200 shadow-lg ${
+        className={`relative z-10 w-full sm:w-auto min-w-0 max-w-sm h-14 sm:h-18 px-5 sm:px-8 rounded-full font-black text-xs sm:text-base flex items-center justify-center gap-2.5 sm:gap-3 transition-all duration-200 shadow-lg ${
           isPushToTalkActive
             ? 'bg-rose-500 text-white scale-[0.98] ring-4 ring-rose-200 shadow-rose-500/30'
             : 'bg-ios-blue hover:bg-blue-600 active:scale-95 text-white shadow-blue-500/25'

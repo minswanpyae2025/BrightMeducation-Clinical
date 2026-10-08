@@ -61,9 +61,9 @@ export const PostExamFeedback: React.FC<PostExamFeedbackProps> = ({
   const patientName = language === 'my' ? currentCase.patient.name_my : currentCase.patient.name;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 space-y-8 select-none pb-safe-bottom">
+    <div className="w-full max-w-4xl mx-auto px-1 sm:px-4 py-4 sm:py-12 space-y-6 sm:space-y-8 select-none pb-safe-bottom overflow-x-hidden min-w-0">
       {/* Top Banner Card */}
-      <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/90 shadow-xl text-center relative overflow-hidden space-y-6">
+      <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-12 border border-slate-200/90 shadow-xl text-center relative overflow-hidden space-y-4 sm:space-y-6 min-w-0">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-ios-blue text-xs sm:text-sm font-bold border border-blue-200 shadow-sm">
           <Award className="w-4 h-4" />
           <span>{t.examinerReport}</span>

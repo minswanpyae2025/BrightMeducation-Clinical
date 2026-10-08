@@ -42,33 +42,33 @@ export const CaseBriefing: React.FC<CaseBriefingProps> = ({
   const tasks = language === 'my' ? currentCase.candidateBrief.tasks_my : currentCase.candidateBrief.tasks;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 sm:py-10 space-y-8 select-none pb-safe-bottom">
+    <div className="w-full max-w-4xl mx-auto px-1 sm:px-4 py-4 sm:py-10 space-y-6 sm:space-y-8 select-none pb-safe-bottom overflow-x-hidden min-w-0">
       {/* Back Button & Station Top Tag */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <button
           onClick={() => {
             medicalAudio.playHapticTap();
             onGoBack();
           }}
-          className="px-4 py-2 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 shadow-sm text-slate-700 font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all"
+          className="px-3 sm:px-4 py-2 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 shadow-sm text-slate-700 font-bold text-xs sm:text-sm flex items-center gap-1 sm:gap-1.5 transition-all shrink-0"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className="w-4 h-4 text-ios-blue shrink-0" />
           <span>{t.changeStation}</span>
         </button>
 
-        <div className="flex items-center gap-2">
-          <span className="px-3.5 py-1.5 rounded-full bg-blue-50 text-ios-blue text-xs font-extrabold border border-blue-200">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <span className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-blue-50 text-ios-blue text-[11px] sm:text-xs font-extrabold border border-blue-200">
             {currentCase.subCategory.toUpperCase()}
           </span>
-          <div className="px-3.5 py-1.5 rounded-full bg-amber-50 text-amber-800 text-xs font-extrabold border border-amber-200 flex items-center gap-1.5">
-            <Coins className="w-3.5 h-3.5 text-amber-500" />
+          <div className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-amber-50 text-amber-800 text-[11px] sm:text-xs font-extrabold border border-amber-200 flex items-center gap-1 sm:gap-1.5">
+            <Coins className="w-3.5 h-3.5 text-amber-500 shrink-0" />
             <span>{currentCase.creditsCost} {t.credits}</span>
           </div>
         </div>
       </div>
 
       {/* Main Big Briefing Card */}
-      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-lg space-y-8">
+      <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-10 border border-slate-200/90 shadow-lg space-y-6 sm:space-y-8 min-w-0 overflow-hidden">
         {/* Title & Demographics */}
         <div className="space-y-2 border-b border-slate-100 pb-6">
           <div className="flex items-center gap-2">

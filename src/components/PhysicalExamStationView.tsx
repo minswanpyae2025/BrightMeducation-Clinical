@@ -75,9 +75,9 @@ export const PhysicalExamStationView: React.FC<PhysicalExamStationViewProps> = (
   const systemSummary = language === 'my' ? (currentSystem?.summary_my || currentSystem?.summary) : currentSystem?.summary;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 items-start pb-safe-bottom">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-6 items-start pb-safe-bottom w-full min-w-0 overflow-x-hidden">
       {/* LEFT COLUMN: ANIMATED PATIENT & WAVEFORM (5 Cols on iPad/Desktop) */}
-      <div className="md:col-span-5 space-y-3 sm:space-y-4 md:sticky md:top-24">
+      <div className="md:col-span-5 space-y-3 sm:space-y-4 md:sticky md:top-24 w-full min-w-0">
         <AnimatedPatient
           name={patientName}
           age={currentCase.patient.age}
@@ -94,7 +94,7 @@ export const PhysicalExamStationView: React.FC<PhysicalExamStationViewProps> = (
         />
 
         {/* System Overview Card */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md">
+        <div className="bg-white p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md">
           <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-ios-blue block mb-1">
             {t.systemExam}
           </span>
@@ -108,7 +108,7 @@ export const PhysicalExamStationView: React.FC<PhysicalExamStationViewProps> = (
       </div>
 
       {/* RIGHT COLUMN: INTERACTIVE EXAMINATION STAGE (7 Cols on iPad/Desktop) */}
-      <div className="md:col-span-7 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
+      <div className="md:col-span-7 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md p-3.5 sm:p-6 md:p-8 space-y-4 sm:space-y-6 w-full min-w-0 overflow-hidden">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
             {t.bedsideManeuvers}

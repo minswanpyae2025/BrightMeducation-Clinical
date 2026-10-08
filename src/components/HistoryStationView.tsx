@@ -89,9 +89,9 @@ export const HistoryStationView: React.FC<HistoryStationViewProps> = ({
   const patientName = language === 'my' ? currentCase.patient.name_my : currentCase.patient.name;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 items-start pb-safe-bottom">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-6 items-start pb-safe-bottom w-full min-w-0 overflow-x-hidden">
       {/* LEFT COLUMN: ANIMATED PATIENT & WAVEFORM (5 Cols on iPad/Desktop) */}
-      <div className="md:col-span-5 space-y-3 sm:space-y-4 md:sticky md:top-24">
+      <div className="md:col-span-5 space-y-3 sm:space-y-4 md:sticky md:top-24 w-full min-w-0">
         <AnimatedPatient
           name={patientName}
           age={currentCase.patient.age}
@@ -141,7 +141,7 @@ export const HistoryStationView: React.FC<HistoryStationViewProps> = ({
       </div>
 
       {/* RIGHT COLUMN: CLEAN CONVERSATION & PUSH TO TALK (7 Cols on iPad/Desktop) */}
-      <div className="md:col-span-7 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md flex flex-col h-[520px] sm:h-[600px] md:h-[calc(100dvh-7rem)] overflow-hidden">
+      <div className="md:col-span-7 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md flex flex-col h-[520px] sm:h-[600px] md:h-[calc(100dvh-7rem)] overflow-hidden w-full min-w-0">
         {/* Top Chat Bar */}
         <div className="px-5 sm:px-6 py-4 bg-gradient-to-r from-slate-50 to-blue-50/30 border-b border-slate-100 flex items-center justify-between">
           <div>

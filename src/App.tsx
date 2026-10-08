@@ -178,7 +178,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-dvh bg-[#F8FAFC] text-[#0F172A] flex flex-col font-sans selection:bg-ios-blue selection:text-white antialiased">
+    <div className="min-h-dvh bg-[#F8FAFC] text-[#0F172A] flex flex-col font-sans selection:bg-ios-blue selection:text-white antialiased w-full max-w-full overflow-x-hidden">
       {/* Top iOS Header */}
       <Header
         currentCase={stationPhase === 'hub' ? null : currentCase}
@@ -198,7 +198,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Responsive Body with Android Viewport Safety */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8 flex flex-col">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 md:px-8 py-3 sm:py-6 flex flex-col overflow-x-hidden min-w-0">
         {/* SCREEN 1: CATEGORY HUB (History Taking vs Physical Exam -> CVS, Respi, Abdomen, CNS) */}
         {stationPhase === 'hub' && (
           <CategoryHub

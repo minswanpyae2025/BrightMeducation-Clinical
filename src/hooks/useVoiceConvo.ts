@@ -193,22 +193,26 @@ export const useVoiceConvo = ({
 
       // Prepare strict case template for zero-hallucination ground truth
       const stationTemplate = {
+        stationId: currentCase.id,
+        mainCategory: currentCase.mainCategory,
+        subCategory: currentCase.subCategory,
+        title: currentCase.title,
+        title_my: currentCase.title_my,
         patientName: currentCase.patient.name,
         patientName_my: currentCase.patient.name_my,
         age: currentCase.patient.age,
+        gender: currentCase.patient.gender,
+        occupation: currentCase.patient.occupation,
+        appearance: currentCase.patient.appearance,
         chiefComplaint: currentCase.patient.chiefComplaint,
         chiefComplaint_my: currentCase.patient.chiefComplaint_my,
-        socrates: currentCase.scriptTriggers.reduce((acc: any, trig) => {
-          acc[trig.triggers[0]] = { en: trig.response, my: trig.response_my, gesture: trig.gesture };
-          return acc;
-        }, {}),
-        pmh: { en: 'Hypertension and dyslipidemia', my: 'သွေးတိုးနှင့် သွေးတွင်းအဆီဓာတ်များ' },
-        medications: { en: 'Amlodipine 5mg', my: 'Amlodipine ၅ မီလီဂရမ်' },
-        allergies: { en: 'No known drug allergies', my: 'ဓာတ်မတည့်သည့် ဆေးဝါးမရှိ' },
-        familyHistory: { en: 'Father died of MI at 52', my: 'ဖခင် အသက် ၅၂ တွင် နှလုံးဖောက်ဆုံးပါး' },
-        lifestyle: { en: 'Smokes 15 cigarettes/day for 30 years', my: 'ဆေးလိပ် ၁၅ လိပ် အနှစ် ၃၀ သောက်' },
-        ice: { en: 'Fears fatal heart attack like his father', my: 'ဖခင်ကဲ့သို့ နှလုံးဖောက်သေဆုံးမည်ကို ကြောက်ရွံ့' },
-        redFlags: { en: 'No tearing back pain, no hemoptysis', my: 'ကျောဘက်ထိုးအောင့်ခြင်းမရှိ၊ သွေးအန်ခြင်းမရှိ' },
+        defaultGesture: currentCase.patient.defaultGesture,
+        setting: currentCase.candidateBrief.setting,
+        situation: currentCase.candidateBrief.situation,
+        triageNote: currentCase.candidateBrief.triageNote,
+        vitals: currentCase.vitals,
+        scriptTriggers: currentCase.scriptTriggers || [],
+        modelSummary: currentCase.modelSummary,
       };
 
       try {
@@ -251,17 +255,20 @@ export const useVoiceConvo = ({
         console.warn('API chat fallback:', err);
       }
 
-      // Local Deterministic Fallback if serverless API is offline
-      const matchedTrigger = currentCase.scriptTriggers.find((t) =>
-        t.triggers.some((k) => clean.toLowerCase().includes(k.toLowerCase()))
+      // Dynamic Local Deterministic Fallback if serverless API is offline
+      const matchedTrigger = currentCase.scriptTriggers?.find((t) =>
+        t.triggers?.some((k) => clean.toLowerCase().includes(k.toLowerCase()))
       );
+
+      const patientComplaintMy = currentCase.patient.chiefComplaint_my || 'နေမကောင်းပါဘူး ဆရာ';
+      const patientComplaintEn = currentCase.patient.chiefComplaint || 'I am feeling quite unwell, doctor';
 
       const fallbackBurmese = matchedTrigger
         ? matchedTrigger.response_my
-        : 'ဆရာ... ကျွန်တော့် ရင်ဘတ်က အောင့်ပြီး တင်းကျပ်နေတာ မသက်သာသေးဘူး...';
+        : `${patientComplaintMy} ဆရာ ဘာကို ထပ်သိချင်ပါသလဲ?`;
       const fallbackEnglish = matchedTrigger
         ? matchedTrigger.response
-        : 'Doctor, my chest tightness is still very painful...';
+        : `${patientComplaintEn}. What else would you like to know, doctor?`;
       const fallbackGesture = matchedTrigger?.gesture || currentCase.patient.defaultGesture;
 
       if (matchedTrigger?.rubricId) {

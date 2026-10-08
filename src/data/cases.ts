@@ -674,7 +674,43 @@ export const OSCE_CASES: OSCECase[] = [
       gcs: '15/15',
       painScore: 0,
     },
-    scriptTriggers: [],
+    scriptTriggers: [
+      {
+        triggers: ['murmur', 'sound', 'heart', 'doctor', 'အသံ', 'မြည်', 'နှလုံး'],
+        response: 'My GP listened to my chest last week and said there’s a whooshing murmur in my heart.',
+        response_my: 'ပြီးခဲ့တဲ့အပတ်က ဆရာဝန်နဲ့ စစ်ဆေးတုန်းက နှလုံးခုန်သံမှာ လေတိုးသလို အသံမြည်နေတယ် (Murmur) လို့ ပြောပါတယ် ဆရာ။',
+        gesture: 'nodding',
+        category: 'socrates',
+      },
+      {
+        triggers: ['dizzy', 'faint', 'blackout', 'lightheaded', 'မူး', 'မိုက်', 'သတိလစ်'],
+        response: 'When I walk up a steep hill or climb the stairs at the train station, I feel dizzy and nearly black out.',
+        response_my: 'ကုန်းတက် လမ်းလျှောက်ရင် ဒါမှမဟုတ် လှေကားတက်ရင် ခေါင်းမူးပြီး သတိလစ်ချင်သလို ဖြစ်ဖြစ်သွားပါတယ် ဆရာ။',
+        gesture: 'rub_temple',
+        category: 'socrates',
+      },
+      {
+        triggers: ['breath', 'shortness', 'dyspnea', 'မော', 'အသက်ရှူ'],
+        response: 'I do get slightly breathless on moderate exercise, more than I used to six months ago.',
+        response_my: 'လွန်ခဲ့တဲ့ ၆ လလောက်ကထက်စာရင် အခု လှုပ်ရှားလိုက်တာနဲ့ အသက်ရှူ မောလွယ်လာပါတယ် ဆရာ။',
+        gesture: 'nodding',
+        category: 'socrates',
+      },
+      {
+        triggers: ['chest pain', 'angina', 'tight', 'ရင်ဘတ်', 'အောင့်', 'တင်း'],
+        response: 'Sometimes a mild dull ache in the center of the chest if I rush, but it goes away once I stop.',
+        response_my: 'အမြန် လမ်းလျှောက်မိရင် ရင်ဘတ်အလယ် အနည်းငယ် အောင့်တတ်ပါတယ်၊ ဒါပေမယ့် ရပ်နားလိုက်ရင် သက်သာသွားပါတယ်။',
+        gesture: 'nodding',
+        category: 'socrates',
+      },
+      {
+        triggers: ['worry', 'concern', 'ice', 'fear', 'စိုးရိမ်', 'ကြောက်'],
+        response: 'I am worried the heart valve is badly worn out and I might suddenly collapse.',
+        response_my: 'နှလုံးအဆို့ရှင် အရမ်းကျဉ်းပျက်စီးနေပြီး ရုတ်တရက် လဲကျသေဆုံးသွားမှာကို စိုးရိမ်မိပါတယ် ဆရာ။',
+        gesture: 'nodding',
+        category: 'ice',
+      },
+    ],
     physicalExamSystems: [
       {
         id: 'cvs-exam-full',
@@ -810,7 +846,36 @@ export const OSCE_CASES: OSCECase[] = [
       gcs: '15/15',
       painScore: 0,
     },
-    scriptTriggers: [],
+    scriptTriggers: [
+      {
+        triggers: ['cough', 'dry', 'phlegm', 'ချောင်း', 'သလိပ်'],
+        response: 'It’s a dry, hacking, irritating cough that’s been going on for over six months now. No phlegm or blood.',
+        response_my: 'လွန်ခဲ့တဲ့ ၆ လလောက်ကတည်းက သလိပ်မပါဘဲ ချောင်းခြောက် အမြဲတဟွတ်ဟွတ် ဆိုးနေတာပါ ဆရာ။ သွေးမပါပါဘူး။',
+        gesture: 'cough',
+        category: 'socrates',
+      },
+      {
+        triggers: ['breath', 'shortness', 'dyspnea', 'walk', 'မော', 'အသက်ရှူ'],
+        response: 'I get breathless just walking to the grocery store or hanging out the washing in the backyard.',
+        response_my: 'စျေးဝယ်ထွက်တာ ဒါမှမဟုတ် အဝတ်လှန်းရုံလေးနဲ့တင် အသက်ရှူ မဝတော့ဘဲ မောဟိုက်လာပါတယ် ဆရာ။',
+        gesture: 'short_of_breath',
+        category: 'socrates',
+      },
+      {
+        triggers: ['finger', 'clubbing', 'nail', 'hands', 'လက်သည်း', 'လက်'],
+        response: 'My fingertips have become rounded and curved over the last year. My daughter noticed it first.',
+        response_my: 'လွန်ခဲ့တဲ့ တစ်နှစ်လောက်ကစပြီး လက်သည်းခွံတွေက လိပ်ခွံလို ဖောင်းခုံးလာပါတယ် ဆရာ... သမီးက စသတိထားမိတာပါ။',
+        gesture: 'nodding',
+        category: 'socrates',
+      },
+      {
+        triggers: ['worry', 'concern', 'ice', 'fear', 'စိုးရိမ်', 'ကြောက်'],
+        response: 'I am terrified I might have pulmonary fibrosis like my aunt, who ended up on oxygen full-time.',
+        response_my: 'ကျွန်မ အဒေါ်တုန်းကလို အဆုတ်အမျှင်အတန်းဖြစ်ပြီး (Pulmonary Fibrosis) တစ်သက်လုံး အောက်ဆီဂျင် ပိုက်တန်းလန်း နေရမှာကို အရမ်းကြောက်ပါတယ် ဆရာ။',
+        gesture: 'wincing',
+        category: 'ice',
+      },
+    ],
     physicalExamSystems: [
       {
         id: 'respi-exam-full',
@@ -946,7 +1011,64 @@ export const OSCE_CASES: OSCECase[] = [
       gcs: '15/15',
       painScore: 6,
     },
-    scriptTriggers: [],
+    scriptTriggers: [
+      {
+        triggers: ['where', 'site', 'location', 'point', 'နေရာ', 'ဘယ်နား', 'ဘယ်နေရာ'],
+        response: 'It’s right here in the upper right part of my belly, right under the ribs.',
+        response_my: 'ညာဘက် နံရိုးအောက် ဝမ်းဗိုက်အပေါ်ပိုင်းက အောင့်တာပါ ဆရာ။ ဖိမိရင် အရမ်းနာပါတယ်။',
+        gesture: 'holding_abdomen',
+        category: 'socrates',
+      },
+      {
+        triggers: ['start', 'onset', 'when', 'ဘယ်တုန်းက', 'ဘယ်အချိန်', 'စဖြစ်'],
+        response: 'Started yesterday evening after having fried fatty pork for dinner. Built up over a few hours.',
+        response_my: 'မနေ့ညနေ ဝက်သားကြော် အဆီတွေ စားပြီးချိန်ကတည်းက စအောင့်တာပါ ဆရာ... နာရီပိုင်းအတွင်း ပိုဆိုးလာပါတယ်။',
+        gesture: 'holding_abdomen',
+        category: 'socrates',
+      },
+      {
+        triggers: ['character', 'feel', 'describe', 'sharp', 'ache', 'ဘယ်လိုနေလဲ', 'ဘယ်လိုခံစားရလဲ', 'ထိုးစူး'],
+        response: 'It’s a severe dull ache that sharpens terribly whenever I take a deep breath or when pressed.',
+        response_my: 'အောင့်ပြီး ကိုက်ခဲနေတာပါ ဆရာ... အသက်ပြင်းပြင်း ရှူသွင်းလိုက်ရင် ဒါမှမဟုတ် လက်နဲ့ ဖိမိရင် ထိုးစူးပြီး အရမ်းနာပါတယ်။',
+        gesture: 'wincing',
+        category: 'socrates',
+      },
+      {
+        triggers: ['radiate', 'spread', 'shoulder', 'back', 'ဖြာ', 'ပခုံး', 'ကျော'],
+        response: 'Yes, the pain shoots through to my back and up to my right shoulder blade.',
+        response_my: 'ဟုတ်ကဲ့ ဆရာ... ညာဘက် ကျောကုန်းနဲ့ ပခုံးရိုးဆီထိ ထိုးပြီး အောင့်ဆစ်နေပါတယ်။',
+        gesture: 'holding_abdomen',
+        category: 'socrates',
+      },
+      {
+        triggers: ['nausea', 'vomit', 'fever', 'sweat', 'ပျို့', 'အန်', 'ဖျား', 'ချမ်း'],
+        response: 'I feel very nauseous and threw up twice yesterday. Also feeling feverish and shivering.',
+        response_my: 'မနေ့က ၂ ကြိမ် အန်ဖူးပါတယ် ဆရာ... ကိုယ်ပူချင်သလို ချမ်းတုန်ပြီး ပျို့အန်ချင်နေပါတယ်။',
+        gesture: 'wincing',
+        category: 'socrates',
+      },
+      {
+        triggers: ['severity', 'scale', '10', 'out of 10', 'ဘယ်လောက်နာ', 'ဘယ်လောက်ဆိုး', '၁၀ မှတ်'],
+        response: 'Normally about 6 out of 10, but if you press on that right side it shoots right to 9 or 10.',
+        response_my: 'သာမန်အချိန်မှာ ၆ မှတ်လောက်ပါ ဆရာ... ဒါပေမယ့် ညာဘက်ကို ဖိလိုက်ရင် ၉ မှတ် ၁၀ မှတ်လောက်ထိ အသည်းအသန် နာသွားပါတယ်။',
+        gesture: 'wincing',
+        category: 'socrates',
+      },
+      {
+        triggers: ['past medical', 'conditions', 'gallstone', 'stones', 'ရောဂါဟောင်း', 'ကျောက်'],
+        response: 'An ultrasound last year showed gallstones, but I never had pain this severe before.',
+        response_my: 'မနှစ်က အာထရာဆောင်းရိုက်တုန်းက သည်းခြေအိတ်ထဲ ကျောက်ရှိတယ်လို့ ပြောပါတယ်... ဒီလောက်ဆိုးတာတော့ အခုမှ ကြုံဖူးတာပါ။',
+        gesture: 'nodding',
+        category: 'pmh',
+      },
+      {
+        triggers: ['worry', 'concern', 'ice', 'fear', 'စိုးရိမ်', 'ကြောက်'],
+        response: 'I am worried the gallbladder is infected or about to burst, and that I might need urgent surgery.',
+        response_my: 'သည်းခြေအိတ် ပိုးဝင်ပေါက်ကွဲမှာ စိုးရိမ်ပါတယ် ဆရာ... အရေးပေါ် ခွဲစိတ်ရမှာကိုလည်း ကြောက်နေပါတယ်။',
+        gesture: 'holding_abdomen',
+        category: 'ice',
+      },
+    ],
     physicalExamSystems: [
       {
         id: 'abdo-exam-full',
@@ -1064,7 +1186,43 @@ export const OSCE_CASES: OSCECase[] = [
       gcs: '15/15',
       painScore: 2,
     },
-    scriptTriggers: [],
+    scriptTriggers: [
+      {
+        triggers: ['face', 'smile', 'eye', 'droop', 'မျက်နှာ', 'မျက်စိ', 'ပြုံး'],
+        response: 'When I looked in the mirror this morning, the right side of my face was sagging and I couldn’t blink my right eye.',
+        response_my: 'ဒီမနက် မှန်ကြည့်တော့ ညာဘက်မျက်နှာတစ်ခြမ်း တွဲကျနေပြီး ညာဘက်မျက်စိလည်း မှိတ်မရတော့တာ တွေ့ရပါတယ် ဆရာ။',
+        gesture: 'nodding',
+        category: 'socrates',
+      },
+      {
+        triggers: ['start', 'onset', 'when', 'morning', 'ဘယ်တုန်းက', 'မနက်'],
+        response: 'Woke up like this at 6 AM today. When I tried to brush my teeth, water was leaking out of the right side of my mouth.',
+        response_my: 'ဒီမနက် ၆ နာရီ အိပ်ရာနိုးတော့ စဖြစ်တာပါ... သွားတိုက်တော့ ညာဘက်ပါးစပ်ထောင့်ကနေ ရေတွေ ယိုထွက်ကျလာပါတယ်။',
+        gesture: 'nodding',
+        category: 'socrates',
+      },
+      {
+        triggers: ['arm', 'leg', 'weakness', 'hand', 'လက်', 'ခြေထောက်', 'အား'],
+        response: 'My arms and legs feel completely normal, strong and no weakness there at all.',
+        response_my: 'လက်တွေ ခြေထောက်တွေကတော့ ပုံမှန်ပါပဲ ဆရာ... လုံးဝ အားနည်းတာ၊ ထုံတာ မရှိပါဘူး။',
+        gesture: 'nodding',
+        category: 'socrates',
+      },
+      {
+        triggers: ['taste', 'sound', 'ear', 'နား', 'အရသာ'],
+        response: 'Food tastes slightly metallic on the tip of my tongue, and sounds in my right ear seem unusually loud.',
+        response_my: 'လျှာဖျားမှာ အရသာက သံချေးနံ့လို ဖြစ်နေပြီး ညာဘက်နားထဲမှာ အသံတွေ အရမ်းကျယ်သလို ကြားနေရပါတယ် ဆရာ။',
+        gesture: 'rub_temple',
+        category: 'socrates',
+      },
+      {
+        triggers: ['worry', 'concern', 'ice', 'fear', 'stroke', 'စိုးရိမ်', 'ကြောက်', 'လေဖြတ်'],
+        response: 'I am so scared I am having a stroke like my grandmother did. Am I having a stroke, doctor?',
+        response_my: 'ကျွန်မ အဘွားတုန်းကလို ဦးနှောက်သွေးကြောပိတ် လေဖြတ်တာလားဆိုပြီး အရမ်းကြောက်နေပါတယ်... လေဖြတ်တာလားဟင် ဆရာ?',
+        gesture: 'wincing',
+        category: 'ice',
+      },
+    ],
     physicalExamSystems: [
       {
         id: 'cns-exam-full',
